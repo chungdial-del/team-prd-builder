@@ -1,0 +1,4 @@
+interface:
+  display_name: "團隊PRD與圖解產生器"
+  short_description: "以精準短句、五層圖解與PM決策，產出可機器驗證的DOCX PRD"
+  default_prompt: "使用 $team-prd-builder 讀取需求及選用HTML Mockup，依五項原則釐清並取得PM決策，再產出五層DOCX PRD、draw.io與目標導向規格測試；不自行增加或核准需求。"
