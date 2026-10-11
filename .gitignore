@@ -1,0 +1,34 @@
+# Python and local development files
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.DS_Store
+.env
+.env.*
+
+# Local inputs and generated deliverables
+inputs/
+sources/
+deliverable/
+deliverables/
+output/
+outputs/
+validation/
+*.docx
+*.pdf
+*.xlsx
+*.xls
+*.csv
+*.zip
+*.html
+*.drawio
+*.svg
+*.png
+*.ttf
+*.otf
+*.ttc
+prd.json
+project.prd.json
+observations.json
+quality-report.json
