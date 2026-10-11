@@ -1,0 +1,2284 @@
+{
+  "schema_version": "1.2",
+  "project": {
+    "id": "EXAMPLE",
+    "title": "方案驗證發布與接收 PRD 範例",
+    "summary": "本範例定義人工方案驗證、發布鎖定與外部接收確認，供產品、工程與QA對照功能、共用規則、圖解及驗收。四項本期功能保留正常、拒絕與復原路徑；自動外送列為後續範圍。",
+    "date": "2026-10-11",
+    "profile": "general-example",
+    "disclaimer": "純合成教學與工具測試案例，不對應任何真實客戶或專案；數量及上限為示例，不代表正式業務規則。",
+    "mvp": [
+      "輸入驗證及拒絕後不變性",
+      "人工發布不可變快照",
+      "外送結果未知時先查詢，明確未接收才允許重送"
+    ],
+    "out_of_scope": [
+      "本範例不定義真實API、登入與資料庫",
+      "不承諾演算法或正式數量限制",
+      "自動觸發外送的業務政策"
+    ],
+    "required_review_roles": [
+      "product",
+      "engineering",
+      "qa"
+    ],
+    "required_diagram_types": [
+      "architecture",
+      "flow",
+      "sequence",
+      "state"
+    ],
+    "validation_gaps": [
+      "AC-03的真實角色權限未驗證。",
+      "狀態轉移測試未驗證發布快照內容或不可變性。",
+      "沒有真實API與接收證據；外部系統測試未執行。",
+      "本範例契約與案例尚未獲PM核准，僅展示機器驗證方法。"
+    ]
+  },
+  "chapters": [
+    {
+      "id": "C01",
+      "title": "摘要與文件治理",
+      "summary": "",
+      "paragraphs": [
+        "需求與核准分開記錄。各功能及共用規則目前為建議待審，尚未形成正式開發交付。",
+        "以同一份需求JSON維護正文、插圖與圖源，正式專案另記維護者、版本、生效及變更流程。"
+      ],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    },
+    {
+      "id": "C02",
+      "title": "問題、價值與成功指標",
+      "summary": "",
+      "paragraphs": [
+        "目標是讓團隊分清驗證、發布鎖定與外部接收，避免把某一步完成當作全流程成功。",
+        "正式專案需定義現有基準、指標算法、資料來源、週期及責任人，不預填通用SLA。"
+      ],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    },
+    {
+      "id": "C03",
+      "title": "範圍與優先順序",
+      "summary": "",
+      "paragraphs": [
+        "本期包括四項人工功能。自動觸發外送、真實登入、API、資料庫及演算法不在本範例中定義。",
+        "範圍確認不代表所有規則核准，依D逐項記錄。"
+      ],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    },
+    {
+      "id": "C04",
+      "title": "角色與權限",
+      "summary": "",
+      "paragraphs": [
+        "操作人員可編輯草稿及執行核心動作；檢視者不能更改業務輸入。",
+        "正式專案需再問組織、資料範圍與每個動作的授權，不從畫面能點擊推定權限。"
+      ],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    },
+    {
+      "id": "C06",
+      "title": "使用者歷程與業務流程",
+      "summary": "",
+      "paragraphs": [
+        "人員輸入並驗證，拒絕後修正；發布鎖定後才送出。結果未知應查詢，不直接重送。"
+      ],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": [
+        "G-FLOW"
+      ]
+    },
+    {
+      "id": "C05",
+      "title": "產品功能架構",
+      "summary": "",
+      "paragraphs": [
+        "本圖表達功能、共用規則與後續範圍，不決定系統服務拆分或部署。"
+      ],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": [
+        "G-ARCH"
+      ]
+    },
+    {
+      "id": "C07",
+      "title": "資料、共用規則與狀態",
+      "summary": "",
+      "paragraphs": [
+        "數量10與上限20是算例，不是業務承諾；正式PRD應補單位、選版、空值與取整政策。",
+        "草稿經驗證後可發布，發布後固定輸入。接收狀態分未知、明確未接收及明確已接收。"
+      ],
+      "feature_ids": [],
+      "rule_ids": [
+        "BR-01",
+        "BR-02",
+        "BR-03",
+        "BR-04"
+      ],
+      "diagram_ids": [
+        "G-STATE"
+      ]
+    },
+    {
+      "id": "C08",
+      "title": "功能與介面規格",
+      "summary": "",
+      "paragraphs": [
+        "以下功能卡連結規則、圖與驗收。HTML Mockup為選用輸入，沒有原型不阻擋需求撰寫。"
+      ],
+      "feature_ids": [
+        "FR-01",
+        "FR-02",
+        "FR-03",
+        "FR-04",
+        "FR-05"
+      ],
+      "rule_ids": [],
+      "diagram_ids": []
+    },
+    {
+      "id": "C09",
+      "title": "系統互動與功能時序",
+      "summary": "",
+      "paragraphs": [
+        "參與者是邏輯責任，不表示已部署同名服務。端點、格式、冪等、timeout、回調及查詢的一致性由工程確認。"
+      ],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": [
+        "G-SEQ"
+      ]
+    },
+    {
+      "id": "C10",
+      "title": "品質、驗收與發布",
+      "summary": "",
+      "paragraphs": [
+        "驗收案例以可觀察結果撰寫，目前均未執行產品測試。文件產生器通過測試不代表產品UAT通過。",
+        "品質要求另問效能、安全、隱私、相容性、觀測、降級及回滾；產品、工程與QA各自審閱。"
+      ],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    },
+    {
+      "id": "C11",
+      "title": "風險、決策與追溯",
+      "summary": "",
+      "paragraphs": [
+        "Q-AUTO只影響後續FR-05。沒有HTML Mockup不列為本期阻擋。",
+        "重構舊PRD應完整映射原章節；本範例沒有舊章節，所以不偽造映射。"
+      ],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    }
+  ],
+  "sources": [
+    {
+      "id": "S-EXAMPLE",
+      "title": "模板工作情境",
+      "kind": "example",
+      "locator": "本需求JSON內的純合成教學情境，無真實客戶文件來源",
+      "authoritative": false
+    }
+  ],
+  "features": [
+    {
+      "id": "FR-01",
+      "title": "驗證方案",
+      "story": "操作人員希望在發布前發現輸入錯誤，避免把無效方案交給下游。",
+      "roles": [
+        "操作人員"
+      ],
+      "priority": "MVP",
+      "status": "proposed",
+      "preconditions": [
+        "處於草稿；以操作人員身分"
+      ],
+      "inputs": [
+        "來源有效性",
+        "數量",
+        "範例上限"
+      ],
+      "steps": [
+        "檢查角色、來源、空值與範圍",
+        "通過才改變狀態"
+      ],
+      "success": "驗證通過後進入已驗證狀態；拒絕時不改輸入、業務狀態或快照。",
+      "errors": [
+        "來源不可用",
+        "數量空白、負值、非數字或超過範例上限"
+      ],
+      "recovery": [
+        "修正輸入並重新驗證"
+      ],
+      "screen_ids": [
+        "UI-PLAN"
+      ],
+      "rule_ids": [
+        "BR-01"
+      ],
+      "diagram_ids": [
+        "G-ARCH",
+        "G-FLOW",
+        "G-SEQ"
+      ],
+      "acceptance_ids": [
+        "AC-01",
+        "AC-02",
+        "AC-03"
+      ],
+      "source_refs": [
+        "S-EXAMPLE"
+      ],
+      "mockup_ids": []
+    },
+    {
+      "id": "FR-02",
+      "title": "發布並鎖定快照",
+      "story": "操作人員希望發布已驗證方案，讓下游取得固定版本。",
+      "roles": [
+        "操作人員"
+      ],
+      "priority": "MVP",
+      "status": "proposed",
+      "preconditions": [
+        "方案已驗證"
+      ],
+      "inputs": [
+        "已驗證的輸入"
+      ],
+      "steps": [
+        "複製已驗證輸入形成快照",
+        "鎖定原輸入"
+      ],
+      "success": "產生輸入快照並進入已發布狀態；不代表已外送。",
+      "errors": [
+        "未驗證",
+        "無權限",
+        "已發布後改寫輸入"
+      ],
+      "recovery": [
+        "驗證後可返回草稿；發布後變更需在正式專案另定政策"
+      ],
+      "screen_ids": [
+        "UI-PLAN"
+      ],
+      "rule_ids": [
+        "BR-02"
+      ],
+      "diagram_ids": [
+        "G-ARCH",
+        "G-FLOW",
+        "G-SEQ"
+      ],
+      "acceptance_ids": [
+        "AC-04",
+        "AC-05"
+      ],
+      "source_refs": [
+        "S-EXAMPLE"
+      ],
+      "mockup_ids": []
+    },
+    {
+      "id": "FR-03",
+      "title": "送出與追蹤結果",
+      "story": "操作人員希望知道外送是否被接收，而不是把送出動作當成成功。",
+      "roles": [
+        "操作人員"
+      ],
+      "priority": "MVP",
+      "status": "proposed",
+      "preconditions": [
+        "方案已發布"
+      ],
+      "inputs": [
+        "已發布快照",
+        "接收狀態查詢結果"
+      ],
+      "steps": [
+        "送出後先記為未知",
+        "查詢接收結果，不把送出等同接收"
+      ],
+      "success": "送出後標為結果未知；查詢確認已接收才進入已接收狀態。",
+      "errors": [
+        "未發布即送出",
+        "未知結果被當成已接收"
+      ],
+      "recovery": [
+        "查詢結果，保留未知狀態直到取得明確結果"
+      ],
+      "screen_ids": [
+        "UI-PLAN"
+      ],
+      "rule_ids": [
+        "BR-03"
+      ],
+      "diagram_ids": [
+        "G-ARCH",
+        "G-FLOW",
+        "G-SEQ",
+        "G-STATE"
+      ],
+      "acceptance_ids": [
+        "AC-06",
+        "AC-07"
+      ],
+      "source_refs": [
+        "S-EXAMPLE"
+      ],
+      "mockup_ids": []
+    },
+    {
+      "id": "FR-04",
+      "title": "確認未接收後重送",
+      "story": "操作人員希望在確定未接收時重送，而不因未知結果造成重複操作。",
+      "roles": [
+        "操作人員"
+      ],
+      "priority": "MVP",
+      "status": "proposed",
+      "preconditions": [
+        "已查詢確認未接收"
+      ],
+      "inputs": [
+        "已發布快照",
+        "明確未接收的證據"
+      ],
+      "steps": [
+        "檢查明確未接收",
+        "重送並回到未知"
+      ],
+      "success": "僅確認未接收後可重送；重送後仍須查詢確認。",
+      "errors": [
+        "結果未知時直接重送",
+        "已接收仍重送"
+      ],
+      "recovery": [
+        "先查詢，再由明確未接收狀態重送"
+      ],
+      "screen_ids": [
+        "UI-PLAN"
+      ],
+      "rule_ids": [
+        "BR-04"
+      ],
+      "diagram_ids": [
+        "G-ARCH",
+        "G-FLOW",
+        "G-SEQ",
+        "G-STATE"
+      ],
+      "acceptance_ids": [
+        "AC-08",
+        "AC-09"
+      ],
+      "source_refs": [
+        "S-EXAMPLE"
+      ],
+      "mockup_ids": []
+    },
+    {
+      "id": "FR-05",
+      "title": "自動外送政策",
+      "story": "團隊希望未來能減少人工外送操作，但觸發條件尚未決定。",
+      "roles": [
+        "操作人員"
+      ],
+      "priority": "Later",
+      "status": "excluded",
+      "preconditions": [
+        "業務政策確認"
+      ],
+      "inputs": [
+        "模擬外部回應"
+      ],
+      "steps": [
+        "本期不實作，政策確認後另定範圍"
+      ],
+      "success": "不在本期，不宣稱已實作。",
+      "errors": [
+        "政策未確認"
+      ],
+      "recovery": [
+        "先回答Q-AUTO"
+      ],
+      "screen_ids": [
+        "UI-PLAN"
+      ],
+      "rule_ids": [],
+      "diagram_ids": [
+        "G-ARCH"
+      ],
+      "acceptance_ids": [],
+      "source_refs": [
+        "S-EXAMPLE"
+      ],
+      "mockup_ids": []
+    }
+  ],
+  "rules": [
+    {
+      "id": "BR-01",
+      "title": "示範輸入驗證",
+      "statement": "來源必須有效；數量必填、為有限數、不小於0且不大於範例上限。0是有效值，空白不是0。數量10與上限20只是算例，不是正式門檻；正式專案需補單位、來源及邊界。",
+      "stage": "驗證",
+      "feature_ids": [
+        "FR-01"
+      ],
+      "status": "proposed",
+      "kind": "範例業務行為",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "BR-02",
+      "title": "發布不等於外送",
+      "statement": "發布時建立輸入快照並鎖定輸入；發布狀態不代表下游已收到。本例不定義正式版本編號及再發布政策。",
+      "stage": "發布",
+      "feature_ids": [
+        "FR-02"
+      ],
+      "status": "proposed",
+      "kind": "範例業務行為",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "BR-03",
+      "title": "未知狀態不可當成功",
+      "statement": "送出後記為結果未知；查詢明確已接收才能改為已接收。前端畫面或HTML的展示結果不能代替真實接收證據。",
+      "stage": "外送與查詢",
+      "feature_ids": [
+        "FR-03"
+      ],
+      "status": "proposed",
+      "kind": "範例業務行為",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "BR-04",
+      "title": "先確認才重送",
+      "statement": "未知時不能重送，只有查詢明確未接收才可重送。正式API的冪等鍵、逾時與重試契約仍須由工程另確認。",
+      "stage": "重送",
+      "feature_ids": [
+        "FR-04"
+      ],
+      "status": "proposed",
+      "kind": "範例業務行為",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    }
+  ],
+  "acceptance": [
+    {
+      "id": "AC-01",
+      "feature_id": "FR-01",
+      "category": "normal",
+      "given": "有效來源，數量10且範例上限20",
+      "when": "操作人員驗證",
+      "then": "進入已驗證，尚未生成發布快照",
+      "execution": "not_run",
+      "evidence": ""
+    },
+    {
+      "id": "AC-02",
+      "feature_id": "FR-01",
+      "category": "rejection",
+      "given": "草稿數量空白或超過範例上限",
+      "when": "驗證",
+      "then": "拒絕且狀態、輸入、快照不變；零值不等同空白",
+      "execution": "not_run",
+      "evidence": ""
+    },
+    {
+      "id": "AC-03",
+      "feature_id": "FR-01",
+      "category": "permission",
+      "given": "目前角色只有檢視權限",
+      "when": "要求驗證",
+      "then": "拒絕且不改業務狀態",
+      "execution": "not_run",
+      "evidence": ""
+    },
+    {
+      "id": "AC-04",
+      "feature_id": "FR-02",
+      "category": "normal",
+      "given": "方案已驗證",
+      "when": "操作人員發布",
+      "then": "新增不可變輸入快照並鎖定輸入",
+      "execution": "not_run",
+      "evidence": ""
+    },
+    {
+      "id": "AC-05",
+      "feature_id": "FR-02",
+      "category": "rejection",
+      "given": "尚在草稿或已發布",
+      "when": "直接發布或改寫輸入",
+      "then": "拒絕且不變更既有快照",
+      "execution": "not_run",
+      "evidence": ""
+    },
+    {
+      "id": "AC-06",
+      "feature_id": "FR-03",
+      "category": "normal",
+      "given": "已發布方案，查詢可取得明確已接收結果",
+      "when": "送出後查詢",
+      "then": "送出後先未知，查詢確認後才已接收",
+      "execution": "not_run",
+      "evidence": ""
+    },
+    {
+      "id": "AC-07",
+      "feature_id": "FR-03",
+      "category": "rejection",
+      "given": "仍在草稿",
+      "when": "要求送出",
+      "then": "拒絕且無快照變更",
+      "execution": "not_run",
+      "evidence": ""
+    },
+    {
+      "id": "AC-08",
+      "feature_id": "FR-04",
+      "category": "normal",
+      "given": "查詢確定未接收",
+      "when": "重送",
+      "then": "進入未知，保留相同發布快照，需再次查詢",
+      "execution": "not_run",
+      "evidence": ""
+    },
+    {
+      "id": "AC-09",
+      "feature_id": "FR-04",
+      "category": "rejection",
+      "given": "外送結果未知",
+      "when": "直接重送",
+      "then": "拒絕且業務狀態、輸入、快照不變；應先查詢，未知不可視為未接收",
+      "execution": "not_run",
+      "evidence": ""
+    }
+  ],
+  "questions": [
+    {
+      "id": "Q-AUTO",
+      "title": "未來自動外送應由什麼事件觸發？",
+      "context": "只阻擋FR-05，不阻擋本例的人工外送；確認觸發、失敗復原與責任角色後另定範圍。",
+      "options": [
+        "發布後自動觸發",
+        "仍由人工送出"
+      ],
+      "owner": "產品負責人",
+      "status": "open",
+      "answer": "",
+      "source_refs": [
+        "S-EXAMPLE"
+      ],
+      "blocking_feature_ids": [
+        "FR-05"
+      ]
+    }
+  ],
+  "decisions": [],
+  "reviews": [
+    {
+      "role": "product",
+      "status": "pending",
+      "evidence": "",
+      "source_refs": []
+    },
+    {
+      "role": "engineering",
+      "status": "pending",
+      "evidence": "",
+      "source_refs": []
+    },
+    {
+      "role": "qa",
+      "status": "pending",
+      "evidence": "",
+      "source_refs": []
+    }
+  ],
+  "mappings": [],
+  "diagrams": [
+    {
+      "id": "G-ARCH",
+      "title": "產品功能架構與本期邊界",
+      "type": "architecture",
+      "chapter_id": "C05",
+      "width": 1000,
+      "height": 530,
+      "feature_ids": [
+        "FR-01",
+        "FR-02",
+        "FR-03",
+        "FR-04",
+        "FR-05"
+      ],
+      "question_ids": [
+        "Q-AUTO"
+      ],
+      "nodes": [
+        {
+          "id": "title",
+          "label": "產品功能架構不等於部署架構",
+          "x": 30,
+          "y": 15,
+          "width": 940,
+          "height": 45,
+          "tone": "navy",
+          "shape": "text"
+        },
+        {
+          "id": "user",
+          "label": "操作人員執行核心動作  檢視者只讀",
+          "x": 200,
+          "y": 75,
+          "width": 600,
+          "height": 50,
+          "tone": "gray",
+          "shape": "rect"
+        },
+        {
+          "id": "validate",
+          "label": "FR-01\n方案驗證",
+          "x": 40,
+          "y": 175,
+          "width": 190,
+          "height": 75,
+          "tone": "blue",
+          "shape": "rect"
+        },
+        {
+          "id": "publish",
+          "label": "FR-02\n發布快照",
+          "x": 280,
+          "y": 175,
+          "width": 190,
+          "height": 75,
+          "tone": "blue",
+          "shape": "rect"
+        },
+        {
+          "id": "send",
+          "label": "FR-03\n送出與查詢",
+          "x": 520,
+          "y": 175,
+          "width": 190,
+          "height": 75,
+          "tone": "blue",
+          "shape": "rect"
+        },
+        {
+          "id": "retry",
+          "label": "FR-04\n確認後重送",
+          "x": 760,
+          "y": 175,
+          "width": 190,
+          "height": 75,
+          "tone": "blue",
+          "shape": "rect"
+        },
+        {
+          "id": "rules",
+          "label": "BR-01至04\n輸入驗證  發布鎖定  未知不等於成功  先查詢再重送",
+          "x": 70,
+          "y": 320,
+          "width": 860,
+          "height": 65,
+          "tone": "green",
+          "shape": "rect"
+        },
+        {
+          "id": "data",
+          "label": "輸入  已驗證  發布快照  接收狀態\n不推定真實API或資料庫",
+          "x": 70,
+          "y": 440,
+          "width": 600,
+          "height": 65,
+          "tone": "gray",
+          "shape": "rect"
+        },
+        {
+          "id": "future",
+          "label": "FR-05  Q-AUTO\n自動觸發不在本期",
+          "x": 720,
+          "y": 440,
+          "width": 230,
+          "height": 65,
+          "tone": "orange",
+          "shape": "rect"
+        }
+      ],
+      "edges": [
+        {
+          "id": "a1",
+          "points": [
+            {
+              "x": 230,
+              "y": 212
+            },
+            {
+              "x": 280,
+              "y": 212
+            }
+          ],
+          "style": "flow",
+          "source": "validate",
+          "target": "publish"
+        },
+        {
+          "id": "a2",
+          "points": [
+            {
+              "x": 470,
+              "y": 212
+            },
+            {
+              "x": 520,
+              "y": 212
+            }
+          ],
+          "style": "flow",
+          "source": "publish",
+          "target": "send"
+        },
+        {
+          "id": "a3",
+          "points": [
+            {
+              "x": 710,
+              "y": 212
+            },
+            {
+              "x": 760,
+              "y": 212
+            }
+          ],
+          "style": "flow",
+          "source": "send",
+          "target": "retry"
+        },
+        {
+          "id": "a4",
+          "points": [
+            {
+              "x": 500,
+              "y": 125
+            },
+            {
+              "x": 500,
+              "y": 145
+            },
+            {
+              "x": 135,
+              "y": 145
+            },
+            {
+              "x": 135,
+              "y": 175
+            }
+          ],
+          "style": "flow"
+        },
+        {
+          "id": "a5",
+          "points": [
+            {
+              "x": 135,
+              "y": 250
+            },
+            {
+              "x": 135,
+              "y": 320
+            }
+          ],
+          "style": "flow",
+          "source": "validate",
+          "target": "rules"
+        },
+        {
+          "id": "a6",
+          "points": [
+            {
+              "x": 375,
+              "y": 250
+            },
+            {
+              "x": 375,
+              "y": 320
+            }
+          ],
+          "style": "flow",
+          "source": "publish",
+          "target": "rules"
+        },
+        {
+          "id": "a7",
+          "points": [
+            {
+              "x": 615,
+              "y": 250
+            },
+            {
+              "x": 615,
+              "y": 320
+            }
+          ],
+          "style": "flow",
+          "source": "send",
+          "target": "rules"
+        },
+        {
+          "id": "a8",
+          "points": [
+            {
+              "x": 855,
+              "y": 250
+            },
+            {
+              "x": 855,
+              "y": 320
+            }
+          ],
+          "style": "flow",
+          "source": "retry",
+          "target": "rules"
+        },
+        {
+          "id": "a9",
+          "points": [
+            {
+              "x": 370,
+              "y": 385
+            },
+            {
+              "x": 370,
+              "y": 440
+            }
+          ],
+          "style": "flow",
+          "source": "rules",
+          "target": "data"
+        }
+      ],
+      "orientation": "landscape",
+      "font_size": 18,
+      "label_font_size": 16,
+      "purpose": "理解四項人工功能、共用規則及不在本期的自動觸發政策。",
+      "reading_notes": [
+        "FR 01至04共用BR 01至04，發布與外部接收是不同結果。",
+        "FR 05由Q AUTO保留待決，只影響後續自動觸發。"
+      ],
+      "legend": [
+        "藍色為本期功能，綠色為共用規則，橘色為待決或排除範圍",
+        "箭頭表示功能關聯，不代表服務部署"
+      ]
+    },
+    {
+      "id": "G-FLOW",
+      "title": "人工操作與接收確認業務流程",
+      "type": "flow",
+      "chapter_id": "C06",
+      "width": 800,
+      "height": 930,
+      "feature_ids": [
+        "FR-01",
+        "FR-02",
+        "FR-03",
+        "FR-04"
+      ],
+      "question_ids": [],
+      "nodes": [
+        {
+          "id": "lane_user",
+          "label": "操作人員",
+          "x": 20,
+          "y": 20,
+          "width": 240,
+          "height": 890,
+          "tone": "gray",
+          "shape": "group"
+        },
+        {
+          "id": "lane_system",
+          "label": "產品",
+          "x": 280,
+          "y": 20,
+          "width": 250,
+          "height": 890,
+          "tone": "gray",
+          "shape": "group"
+        },
+        {
+          "id": "lane_external",
+          "label": "外部系統",
+          "x": 550,
+          "y": 20,
+          "width": 230,
+          "height": 890,
+          "tone": "gray",
+          "shape": "group"
+        },
+        {
+          "id": "edit",
+          "label": "輸入來源與數量",
+          "x": 40,
+          "y": 100,
+          "width": 200,
+          "height": 70,
+          "tone": "blue",
+          "shape": "rect"
+        },
+        {
+          "id": "check",
+          "label": "FR-01\n驗證角色與輸入",
+          "x": 300,
+          "y": 100,
+          "width": 210,
+          "height": 70,
+          "tone": "blue",
+          "shape": "rect"
+        },
+        {
+          "id": "gate",
+          "label": "通過",
+          "x": 335,
+          "y": 210,
+          "width": 140,
+          "height": 80,
+          "tone": "blue",
+          "shape": "diamond"
+        },
+        {
+          "id": "reject",
+          "label": "拒絕並修正輸入\n業務狀態不變",
+          "x": 40,
+          "y": 215,
+          "width": 200,
+          "height": 85,
+          "tone": "orange",
+          "shape": "rect"
+        },
+        {
+          "id": "valid",
+          "label": "已驗證",
+          "x": 300,
+          "y": 330,
+          "width": 210,
+          "height": 70,
+          "tone": "green",
+          "shape": "rect"
+        },
+        {
+          "id": "publish",
+          "label": "FR-02\n人工發布",
+          "x": 40,
+          "y": 330,
+          "width": 200,
+          "height": 70,
+          "tone": "blue",
+          "shape": "rect"
+        },
+        {
+          "id": "snapshot",
+          "label": "已發布\n鎖定固定快照",
+          "x": 300,
+          "y": 440,
+          "width": 210,
+          "height": 80,
+          "tone": "green",
+          "shape": "rect"
+        },
+        {
+          "id": "send",
+          "label": "FR-03\n送出先記為未知",
+          "x": 300,
+          "y": 550,
+          "width": 210,
+          "height": 80,
+          "tone": "blue",
+          "shape": "rect"
+        },
+        {
+          "id": "external",
+          "label": "取得查詢回應",
+          "x": 560,
+          "y": 550,
+          "width": 200,
+          "height": 80,
+          "tone": "gray",
+          "shape": "rect"
+        },
+        {
+          "id": "result",
+          "label": "查詢\n結果",
+          "x": 335,
+          "y": 685,
+          "width": 140,
+          "height": 80,
+          "tone": "blue",
+          "shape": "diamond"
+        },
+        {
+          "id": "unknown",
+          "label": "未知不可重送\n繼續查詢",
+          "x": 40,
+          "y": 810,
+          "width": 200,
+          "height": 85,
+          "tone": "orange",
+          "shape": "rect"
+        },
+        {
+          "id": "retry",
+          "label": "FR-04\n未接收才可重送",
+          "x": 300,
+          "y": 810,
+          "width": 210,
+          "height": 85,
+          "tone": "blue",
+          "shape": "rect"
+        },
+        {
+          "id": "done",
+          "label": "確認已接收\n不是只按送出",
+          "x": 560,
+          "y": 810,
+          "width": 200,
+          "height": 85,
+          "tone": "green",
+          "shape": "rect"
+        }
+      ],
+      "edges": [
+        {
+          "id": "f1",
+          "points": [
+            {
+              "x": 240,
+              "y": 135
+            },
+            {
+              "x": 300,
+              "y": 135
+            }
+          ],
+          "style": "flow",
+          "source": "edit",
+          "target": "check"
+        },
+        {
+          "id": "f2",
+          "points": [
+            {
+              "x": 405,
+              "y": 170
+            },
+            {
+              "x": 405,
+              "y": 210
+            }
+          ],
+          "style": "flow",
+          "source": "check",
+          "target": "gate"
+        },
+        {
+          "id": "f3",
+          "points": [
+            {
+              "x": 335,
+              "y": 250
+            },
+            {
+              "x": 240,
+              "y": 250
+            }
+          ],
+          "style": "flow",
+          "label": "否",
+          "label_x": 287.5,
+          "label_y": 240,
+          "source": "gate",
+          "target": "reject"
+        },
+        {
+          "id": "f4",
+          "points": [
+            {
+              "x": 140,
+              "y": 215
+            },
+            {
+              "x": 140,
+              "y": 170
+            }
+          ],
+          "style": "return",
+          "source": "reject",
+          "target": "edit"
+        },
+        {
+          "id": "f5",
+          "points": [
+            {
+              "x": 405,
+              "y": 290
+            },
+            {
+              "x": 405,
+              "y": 330
+            }
+          ],
+          "style": "flow",
+          "label": "是",
+          "label_x": 405,
+          "label_y": 300,
+          "source": "gate",
+          "target": "valid"
+        },
+        {
+          "id": "f6",
+          "points": [
+            {
+              "x": 300,
+              "y": 365
+            },
+            {
+              "x": 240,
+              "y": 365
+            }
+          ],
+          "style": "flow",
+          "source": "valid",
+          "target": "publish"
+        },
+        {
+          "id": "f7",
+          "points": [
+            {
+              "x": 140,
+              "y": 400
+            },
+            {
+              "x": 140,
+              "y": 480
+            },
+            {
+              "x": 300,
+              "y": 480
+            }
+          ],
+          "style": "flow",
+          "source": "publish",
+          "target": "snapshot"
+        },
+        {
+          "id": "f8",
+          "points": [
+            {
+              "x": 405,
+              "y": 520
+            },
+            {
+              "x": 405,
+              "y": 550
+            }
+          ],
+          "style": "flow",
+          "source": "snapshot",
+          "target": "send"
+        },
+        {
+          "id": "f9",
+          "points": [
+            {
+              "x": 510,
+              "y": 590
+            },
+            {
+              "x": 560,
+              "y": 590
+            }
+          ],
+          "style": "flow",
+          "source": "send",
+          "target": "external"
+        },
+        {
+          "id": "f10",
+          "points": [
+            {
+              "x": 660,
+              "y": 630
+            },
+            {
+              "x": 660,
+              "y": 725
+            },
+            {
+              "x": 475,
+              "y": 725
+            }
+          ],
+          "style": "return",
+          "source": "external",
+          "target": "result"
+        },
+        {
+          "id": "f11",
+          "points": [
+            {
+              "x": 335,
+              "y": 725
+            },
+            {
+              "x": 140,
+              "y": 725
+            },
+            {
+              "x": 140,
+              "y": 810
+            }
+          ],
+          "style": "flow",
+          "label": "未知",
+          "label_x": 237.5,
+          "label_y": 757.5,
+          "source": "result",
+          "target": "unknown"
+        },
+        {
+          "id": "f12",
+          "points": [
+            {
+              "x": 405,
+              "y": 765
+            },
+            {
+              "x": 405,
+              "y": 810
+            }
+          ],
+          "style": "flow",
+          "label": "未接收",
+          "label_x": 405,
+          "label_y": 777.5,
+          "source": "result",
+          "target": "retry"
+        },
+        {
+          "id": "f13",
+          "points": [
+            {
+              "x": 475,
+              "y": 745
+            },
+            {
+              "x": 540,
+              "y": 745
+            },
+            {
+              "x": 540,
+              "y": 852
+            },
+            {
+              "x": 560,
+              "y": 852
+            }
+          ],
+          "style": "flow",
+          "label": "已接收",
+          "label_x": 517.5,
+          "label_y": 788.5,
+          "source": "result",
+          "target": "done"
+        }
+      ],
+      "orientation": "portrait",
+      "font_size": 18,
+      "label_font_size": 16,
+      "purpose": "沿責任泳道閱讀驗證、發布、送出與查詢，區分拒絕、未知及明確接收結果。",
+      "reading_notes": [
+        "驗證失敗回到修正，業務狀態與快照不變。",
+        "發布生成快照；結果未知時先查詢，明確未接收才可重送。"
+      ],
+      "legend": [
+        "三條泳道分別為操作人員、產品與外部系統",
+        "實線為操作流向，虛線為回應或返回，橘色為拒絕或未知"
+      ]
+    },
+    {
+      "id": "G-SEQ",
+      "title": "發布送出與接收確認功能時序",
+      "type": "sequence",
+      "chapter_id": "C09",
+      "width": 1120,
+      "height": 620,
+      "feature_ids": [
+        "FR-01",
+        "FR-02",
+        "FR-03",
+        "FR-04"
+      ],
+      "question_ids": [],
+      "nodes": [
+        {
+          "id": "actor",
+          "label": "操作人員",
+          "x": 35,
+          "y": 17,
+          "width": 170,
+          "height": 47,
+          "tone": "navy",
+          "shape": "rect"
+        },
+        {
+          "id": "ui",
+          "label": "產品介面",
+          "x": 305,
+          "y": 17,
+          "width": 170,
+          "height": 47,
+          "tone": "navy",
+          "shape": "rect"
+        },
+        {
+          "id": "service",
+          "label": "狀態與快照",
+          "x": 575,
+          "y": 17,
+          "width": 190,
+          "height": 47,
+          "tone": "navy",
+          "shape": "rect"
+        },
+        {
+          "id": "external",
+          "label": "外部系統",
+          "x": 870,
+          "y": 17,
+          "width": 190,
+          "height": 47,
+          "tone": "navy",
+          "shape": "rect"
+        },
+        {
+          "id": "unknown_alt",
+          "label": "結果未知  先查詢不可直接重送",
+          "x": 35,
+          "y": 310,
+          "width": 1030,
+          "height": 39,
+          "tone": "orange",
+          "shape": "group"
+        },
+        {
+          "id": "known_alt",
+          "label": "確認未接收才可重送  已接收則結束",
+          "x": 35,
+          "y": 452,
+          "width": 1030,
+          "height": 39,
+          "tone": "green",
+          "shape": "group"
+        }
+      ],
+      "edges": [
+        {
+          "id": "l1",
+          "points": [
+            {
+              "x": 120,
+              "y": 65
+            },
+            {
+              "x": 120,
+              "y": 589
+            }
+          ],
+          "style": "lifeline"
+        },
+        {
+          "id": "l2",
+          "points": [
+            {
+              "x": 390,
+              "y": 65
+            },
+            {
+              "x": 390,
+              "y": 589
+            }
+          ],
+          "style": "lifeline"
+        },
+        {
+          "id": "l3",
+          "points": [
+            {
+              "x": 670,
+              "y": 65
+            },
+            {
+              "x": 670,
+              "y": 589
+            }
+          ],
+          "style": "lifeline"
+        },
+        {
+          "id": "l4",
+          "points": [
+            {
+              "x": 965,
+              "y": 65
+            },
+            {
+              "x": 965,
+              "y": 589
+            }
+          ],
+          "style": "lifeline"
+        },
+        {
+          "id": "s1",
+          "points": [
+            {
+              "x": 120,
+              "y": 103
+            },
+            {
+              "x": 390,
+              "y": 103
+            }
+          ],
+          "style": "flow",
+          "label": "1 FR-01 驗證",
+          "label_x": 255,
+          "label_y": 95
+        },
+        {
+          "id": "s2",
+          "points": [
+            {
+              "x": 390,
+              "y": 146
+            },
+            {
+              "x": 670,
+              "y": 146
+            }
+          ],
+          "style": "flow",
+          "label": "2 檢查角色與輸入",
+          "label_x": 530,
+          "label_y": 138
+        },
+        {
+          "id": "s3",
+          "points": [
+            {
+              "x": 670,
+              "y": 189
+            },
+            {
+              "x": 390,
+              "y": 189
+            }
+          ],
+          "style": "return",
+          "label": "3 通過或拒絕且不變",
+          "label_x": 530,
+          "label_y": 181
+        },
+        {
+          "id": "s4",
+          "points": [
+            {
+              "x": 120,
+              "y": 232
+            },
+            {
+              "x": 670,
+              "y": 232
+            }
+          ],
+          "style": "flow",
+          "label": "4 FR-02 發布固定快照",
+          "label_x": 395,
+          "label_y": 224
+        },
+        {
+          "id": "s5",
+          "points": [
+            {
+              "x": 670,
+              "y": 280
+            },
+            {
+              "x": 965,
+              "y": 280
+            }
+          ],
+          "style": "flow",
+          "label": "5 FR-03 送出先未知",
+          "label_x": 817.5,
+          "label_y": 271
+        },
+        {
+          "id": "s6",
+          "points": [
+            {
+              "x": 120,
+              "y": 370
+            },
+            {
+              "x": 670,
+              "y": 370
+            }
+          ],
+          "style": "flow",
+          "label": "6 查詢而非直接重送",
+          "label_x": 395,
+          "label_y": 361
+        },
+        {
+          "id": "s7",
+          "points": [
+            {
+              "x": 670,
+              "y": 413
+            },
+            {
+              "x": 965,
+              "y": 413
+            }
+          ],
+          "style": "flow",
+          "label": "7 取得接收回應",
+          "label_x": 817.5,
+          "label_y": 404
+        },
+        {
+          "id": "s8",
+          "points": [
+            {
+              "x": 965,
+              "y": 512
+            },
+            {
+              "x": 670,
+              "y": 512
+            }
+          ],
+          "style": "return",
+          "label": "8 接收 未接收或未知",
+          "label_x": 817.5,
+          "label_y": 503
+        },
+        {
+          "id": "s9",
+          "points": [
+            {
+              "x": 120,
+              "y": 559
+            },
+            {
+              "x": 670,
+              "y": 559
+            }
+          ],
+          "style": "flow",
+          "label": "9 FR-04 明確未接收才重送",
+          "label_x": 395,
+          "label_y": 550
+        }
+      ],
+      "orientation": "landscape",
+      "font_size": 18,
+      "label_font_size": 16,
+      "purpose": "理解參與者的先後互動，以及結果未知時查詢與重送的條件。",
+      "reading_notes": [
+        "發布固定快照，送出後仍需明確接收證據。",
+        "只有確認未接收才能重送；真實API契約需另行確認。"
+      ],
+      "legend": [
+        "虛線生命線表示參與者，實線箭頭為要求，虛線箭頭為回應",
+        "橘框標未知限制，綠框標確認後的復原條件"
+      ]
+    },
+    {
+      "id": "G-STATE",
+      "title": "外部接收狀態與重送條件",
+      "type": "state",
+      "chapter_id": "C07",
+      "width": 1000,
+      "height": 570,
+      "feature_ids": [
+        "FR-03",
+        "FR-04"
+      ],
+      "question_ids": [],
+      "purpose": "區分未知、確認未接收與已接收。只有確認未接收才可重送。",
+      "reading_notes": [
+        "此圖只描述外部接收狀態，不描述需求核准狀態。",
+        "查詢未知或拒絕重送時，狀態維持不變。"
+      ],
+      "legend": [
+        "實線為已列出的狀態轉移。橘色為結果未知。",
+        "未列出的轉移不能視為允許；正式規格仍待PM確認。"
+      ],
+      "orientation": "landscape",
+      "font_size": 20,
+      "label_font_size": 18,
+      "nodes": [
+        {
+          "id": "unknown",
+          "label": "未知",
+          "x": 400,
+          "y": 90,
+          "width": 200,
+          "height": 80,
+          "shape": "rect",
+          "tone": "orange"
+        },
+        {
+          "id": "not_received",
+          "label": "確認未接收",
+          "x": 120,
+          "y": 310,
+          "width": 230,
+          "height": 90,
+          "shape": "rect",
+          "tone": "blue"
+        },
+        {
+          "id": "received",
+          "label": "已接收",
+          "x": 650,
+          "y": 310,
+          "width": 230,
+          "height": 90,
+          "shape": "rect",
+          "tone": "green"
+        },
+        {
+          "id": "note",
+          "label": "未知不得直接重送。已接收不得重送。\n拒絕後接收狀態不變。",
+          "x": 130,
+          "y": 455,
+          "width": 740,
+          "height": 75,
+          "shape": "text",
+          "tone": "gray"
+        }
+      ],
+      "edges": [
+        {
+          "id": "query_no",
+          "source": "unknown",
+          "target": "not_received",
+          "points": [
+            {
+              "x": 400,
+              "y": 130
+            },
+            {
+              "x": 235,
+              "y": 130
+            },
+            {
+              "x": 235,
+              "y": 310
+            }
+          ],
+          "style": "flow",
+          "label": "查詢確認未接收",
+          "label_x": 230,
+          "label_y": 108
+        },
+        {
+          "id": "query_yes",
+          "source": "unknown",
+          "target": "received",
+          "points": [
+            {
+              "x": 600,
+              "y": 130
+            },
+            {
+              "x": 765,
+              "y": 130
+            },
+            {
+              "x": 765,
+              "y": 310
+            }
+          ],
+          "style": "flow",
+          "label": "查詢確認已接收",
+          "label_x": 780,
+          "label_y": 108
+        },
+        {
+          "id": "retry",
+          "source": "not_received",
+          "target": "unknown",
+          "points": [
+            {
+              "x": 350,
+              "y": 355
+            },
+            {
+              "x": 500,
+              "y": 355
+            },
+            {
+              "x": 500,
+              "y": 170
+            }
+          ],
+          "style": "flow",
+          "label": "重送後仍未知",
+          "label_x": 465,
+          "label_y": 330
+        }
+      ]
+    }
+  ],
+  "mockups": [],
+  "explanation_levels": [
+    {
+      "level": 1,
+      "title": "白話目的",
+      "reader": "所有讀者",
+      "note": "先讀問題、成功定義與本期範圍。",
+      "chapter_ids": [
+        "C01",
+        "C02",
+        "C03"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "使用者任務",
+      "reader": "PM、客戶及操作人員",
+      "note": "再讀角色、操作路徑與責任交接。",
+      "chapter_ids": [
+        "C04",
+        "C06"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "業務規則與狀態",
+      "reader": "產品、工程與QA",
+      "note": "確認功能邊界、資料、規則與狀態。",
+      "chapter_ids": [
+        "C05",
+        "C07",
+        "C08"
+      ]
+    },
+    {
+      "level": 4,
+      "title": "系統互動與技術契約",
+      "reader": "工程與介接窗口",
+      "note": "讀取系統時序。未提供的API與部署架構仍待確認。",
+      "chapter_ids": [
+        "C09"
+      ]
+    },
+    {
+      "level": 5,
+      "title": "極限邊界與驗證",
+      "reader": "PM、工程與QA",
+      "note": "檢查驗收、失敗、復原及決策。最後查看機器驗證結果。",
+      "chapter_ids": [
+        "C10",
+        "C11"
+      ]
+    }
+  ],
+  "goals": [
+    {
+      "id": "GO-INPUT",
+      "title": "拒絕無效數量",
+      "statement": "拒絕無效數量。本項是合成規格，尚未獲PM核准。",
+      "status": "proposed",
+      "feature_ids": [
+        "FR-01"
+      ],
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "GO-PUBLISH",
+      "title": "已驗證才可發布",
+      "statement": "已驗證才可發布。本項是合成規格，尚未獲PM核准。",
+      "status": "proposed",
+      "feature_ids": [
+        "FR-02"
+      ],
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "GO-RECEIPT",
+      "title": "接收結果必須確認",
+      "statement": "接收結果必須確認。本項是合成規格，尚未獲PM核准。",
+      "status": "proposed",
+      "feature_ids": [
+        "FR-03"
+      ],
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "GO-RETRY",
+      "title": "確認未接收才重送",
+      "statement": "確認未接收才重送。本項是合成規格，尚未獲PM核准。",
+      "status": "proposed",
+      "feature_ids": [
+        "FR-04"
+      ],
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    }
+  ],
+  "contracts": [
+    {
+      "id": "CT-INPUT",
+      "title": "拒絕無效數量參考契約",
+      "kind": "number_range",
+      "status": "proposed",
+      "goal_id": "GO-INPUT",
+      "feature_ids": [
+        "FR-01"
+      ],
+      "rule_ids": [
+        "BR-01"
+      ],
+      "source_refs": [
+        "S-EXAMPLE"
+      ],
+      "spec": {
+        "field": "quantity",
+        "minimum": 0,
+        "maximum": 20
+      }
+    },
+    {
+      "id": "CT-PUBLISH",
+      "title": "已驗證才可發布參考契約",
+      "kind": "transition",
+      "status": "proposed",
+      "goal_id": "GO-PUBLISH",
+      "feature_ids": [
+        "FR-02"
+      ],
+      "rule_ids": [
+        "BR-02"
+      ],
+      "source_refs": [
+        "S-EXAMPLE"
+      ],
+      "spec": {
+        "states": [
+          "draft",
+          "validated",
+          "published"
+        ],
+        "events": [
+          "publish"
+        ],
+        "transitions": [
+          {
+            "from": "validated",
+            "event": "publish",
+            "to": "published"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CT-RECEIPT",
+      "title": "接收結果必須確認參考契約",
+      "kind": "transition",
+      "status": "proposed",
+      "goal_id": "GO-RECEIPT",
+      "feature_ids": [
+        "FR-03"
+      ],
+      "rule_ids": [
+        "BR-03"
+      ],
+      "source_refs": [
+        "S-EXAMPLE"
+      ],
+      "spec": {
+        "states": [
+          "draft",
+          "published",
+          "unknown",
+          "received"
+        ],
+        "events": [
+          "send",
+          "query_received"
+        ],
+        "transitions": [
+          {
+            "from": "published",
+            "event": "send",
+            "to": "unknown"
+          },
+          {
+            "from": "unknown",
+            "event": "query_received",
+            "to": "received"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CT-RETRY",
+      "title": "確認未接收才重送參考契約",
+      "kind": "transition",
+      "status": "proposed",
+      "goal_id": "GO-RETRY",
+      "feature_ids": [
+        "FR-04"
+      ],
+      "rule_ids": [
+        "BR-04"
+      ],
+      "source_refs": [
+        "S-EXAMPLE"
+      ],
+      "spec": {
+        "states": [
+          "unknown",
+          "not_received",
+          "received"
+        ],
+        "events": [
+          "retry"
+        ],
+        "transitions": [
+          {
+            "from": "not_received",
+            "event": "retry",
+            "to": "unknown"
+          }
+        ]
+      }
+    }
+  ],
+  "checks": [
+    {
+      "id": "TC-INPUT-OK",
+      "title": "TC-INPUT-OK",
+      "goal_id": "GO-INPUT",
+      "feature_id": "FR-01",
+      "contract_id": "CT-INPUT",
+      "acceptance_ids": [
+        "AC-01"
+      ],
+      "input": {
+        "quantity": 10
+      },
+      "expected": {
+        "valid": true
+      },
+      "status": "proposed",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "TC-INPUT-ZERO",
+      "title": "TC-INPUT-ZERO",
+      "goal_id": "GO-INPUT",
+      "feature_id": "FR-01",
+      "contract_id": "CT-INPUT",
+      "acceptance_ids": [
+        "AC-02"
+      ],
+      "input": {
+        "quantity": 0
+      },
+      "expected": {
+        "valid": true
+      },
+      "status": "proposed",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "TC-INPUT-MAX",
+      "title": "TC-INPUT-MAX",
+      "goal_id": "GO-INPUT",
+      "feature_id": "FR-01",
+      "contract_id": "CT-INPUT",
+      "acceptance_ids": [
+        "AC-01"
+      ],
+      "input": {
+        "quantity": 20
+      },
+      "expected": {
+        "valid": true
+      },
+      "status": "proposed",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "TC-INPUT-OVER",
+      "title": "TC-INPUT-OVER",
+      "goal_id": "GO-INPUT",
+      "feature_id": "FR-01",
+      "contract_id": "CT-INPUT",
+      "acceptance_ids": [
+        "AC-02"
+      ],
+      "input": {
+        "quantity": 21
+      },
+      "expected": {
+        "valid": false
+      },
+      "status": "proposed",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "TC-INPUT-BLANK",
+      "title": "TC-INPUT-BLANK",
+      "goal_id": "GO-INPUT",
+      "feature_id": "FR-01",
+      "contract_id": "CT-INPUT",
+      "acceptance_ids": [
+        "AC-02"
+      ],
+      "input": {
+        "quantity": ""
+      },
+      "expected": {
+        "valid": false
+      },
+      "status": "proposed",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "TC-PUBLISH-OK",
+      "title": "TC-PUBLISH-OK",
+      "goal_id": "GO-PUBLISH",
+      "feature_id": "FR-02",
+      "contract_id": "CT-PUBLISH",
+      "acceptance_ids": [
+        "AC-04"
+      ],
+      "input": {
+        "state": "validated",
+        "event": "publish"
+      },
+      "expected": {
+        "allowed": true,
+        "state": "published"
+      },
+      "status": "proposed",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "TC-PUBLISH-REJECT",
+      "title": "TC-PUBLISH-REJECT",
+      "goal_id": "GO-PUBLISH",
+      "feature_id": "FR-02",
+      "contract_id": "CT-PUBLISH",
+      "acceptance_ids": [
+        "AC-05"
+      ],
+      "input": {
+        "state": "draft",
+        "event": "publish"
+      },
+      "expected": {
+        "allowed": false,
+        "state": "draft"
+      },
+      "status": "proposed",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "TC-SEND-OK",
+      "title": "TC-SEND-OK",
+      "goal_id": "GO-RECEIPT",
+      "feature_id": "FR-03",
+      "contract_id": "CT-RECEIPT",
+      "acceptance_ids": [
+        "AC-06"
+      ],
+      "input": {
+        "state": "published",
+        "event": "send"
+      },
+      "expected": {
+        "allowed": true,
+        "state": "unknown"
+      },
+      "status": "proposed",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "TC-QUERY-OK",
+      "title": "TC-QUERY-OK",
+      "goal_id": "GO-RECEIPT",
+      "feature_id": "FR-03",
+      "contract_id": "CT-RECEIPT",
+      "acceptance_ids": [
+        "AC-06"
+      ],
+      "input": {
+        "state": "unknown",
+        "event": "query_received"
+      },
+      "expected": {
+        "allowed": true,
+        "state": "received"
+      },
+      "status": "proposed",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "TC-SEND-REJECT",
+      "title": "TC-SEND-REJECT",
+      "goal_id": "GO-RECEIPT",
+      "feature_id": "FR-03",
+      "contract_id": "CT-RECEIPT",
+      "acceptance_ids": [
+        "AC-07"
+      ],
+      "input": {
+        "state": "draft",
+        "event": "send"
+      },
+      "expected": {
+        "allowed": false,
+        "state": "draft"
+      },
+      "status": "proposed",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "TC-RETRY-OK",
+      "title": "TC-RETRY-OK",
+      "goal_id": "GO-RETRY",
+      "feature_id": "FR-04",
+      "contract_id": "CT-RETRY",
+      "acceptance_ids": [
+        "AC-08"
+      ],
+      "input": {
+        "state": "not_received",
+        "event": "retry"
+      },
+      "expected": {
+        "allowed": true,
+        "state": "unknown"
+      },
+      "status": "proposed",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "TC-RETRY-UNKNOWN",
+      "title": "TC-RETRY-UNKNOWN",
+      "goal_id": "GO-RETRY",
+      "feature_id": "FR-04",
+      "contract_id": "CT-RETRY",
+      "acceptance_ids": [
+        "AC-09"
+      ],
+      "input": {
+        "state": "unknown",
+        "event": "retry"
+      },
+      "expected": {
+        "allowed": false,
+        "state": "unknown"
+      },
+      "status": "proposed",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    },
+    {
+      "id": "TC-RETRY-RECEIVED",
+      "title": "TC-RETRY-RECEIVED",
+      "goal_id": "GO-RETRY",
+      "feature_id": "FR-04",
+      "contract_id": "CT-RETRY",
+      "acceptance_ids": [
+        "AC-09"
+      ],
+      "input": {
+        "state": "received",
+        "event": "retry"
+      },
+      "expected": {
+        "allowed": false,
+        "state": "received"
+      },
+      "status": "proposed",
+      "source_refs": [
+        "S-EXAMPLE"
+      ]
+    }
+  ],
+  "changes": []
+}

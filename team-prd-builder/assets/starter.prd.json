@@ -1,0 +1,225 @@
+{
+  "schema_version": "1.2",
+  "project": {
+    "id": "PROJECT",
+    "title": "待確認的產品名稱",
+    "summary": "起稿模板；先完成訪談與範圍確認，再生成完整PRD。",
+    "date": "待作者確認",
+    "profile": "general",
+    "disclaimer": "未確認草稿。所有空白、來源與規則需由作者補齊。",
+    "mvp": [],
+    "out_of_scope": [],
+    "required_review_roles": [
+      "product",
+      "engineering",
+      "qa"
+    ],
+    "required_diagram_types": [
+      "architecture",
+      "flow",
+      "sequence"
+    ],
+    "validation_gaps": [
+      "沒有真實系統與授權環境，不能驗證產品實作。"
+    ]
+  },
+  "chapters": [
+    {
+      "id": "C01",
+      "title": "摘要與文件治理",
+      "summary": "",
+      "paragraphs": [],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    },
+    {
+      "id": "C02",
+      "title": "問題、價值與成功指標",
+      "summary": "",
+      "paragraphs": [],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    },
+    {
+      "id": "C03",
+      "title": "範圍與優先順序",
+      "summary": "",
+      "paragraphs": [],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    },
+    {
+      "id": "C04",
+      "title": "角色與權限",
+      "summary": "",
+      "paragraphs": [],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    },
+    {
+      "id": "C06",
+      "title": "使用者歷程與業務流程",
+      "summary": "",
+      "paragraphs": [],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    },
+    {
+      "id": "C05",
+      "title": "產品功能架構",
+      "summary": "",
+      "paragraphs": [],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    },
+    {
+      "id": "C07",
+      "title": "資料、共用規則與狀態",
+      "summary": "",
+      "paragraphs": [],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    },
+    {
+      "id": "C08",
+      "title": "功能與介面規格",
+      "summary": "",
+      "paragraphs": [],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    },
+    {
+      "id": "C09",
+      "title": "系統互動與功能時序",
+      "summary": "",
+      "paragraphs": [],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    },
+    {
+      "id": "C10",
+      "title": "品質、驗收與發布",
+      "summary": "",
+      "paragraphs": [],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    },
+    {
+      "id": "C11",
+      "title": "風險、決策與追溯",
+      "summary": "",
+      "paragraphs": [],
+      "feature_ids": [],
+      "rule_ids": [],
+      "diagram_ids": []
+    }
+  ],
+  "sources": [],
+  "features": [],
+  "rules": [],
+  "acceptance": [],
+  "questions": [
+    {
+      "id": "Q-SCOPE",
+      "title": "本期要替誰解決什麼問題？",
+      "context": "回答後界定價值、最小範圍與成功指標。",
+      "options": [],
+      "owner": "產品負責人",
+      "status": "open",
+      "answer": "",
+      "source_refs": [],
+      "blocking_feature_ids": []
+    }
+  ],
+  "decisions": [],
+  "reviews": [
+    {
+      "role": "product",
+      "status": "pending",
+      "evidence": "",
+      "source_refs": []
+    },
+    {
+      "role": "engineering",
+      "status": "pending",
+      "evidence": "",
+      "source_refs": []
+    },
+    {
+      "role": "qa",
+      "status": "pending",
+      "evidence": "",
+      "source_refs": []
+    }
+  ],
+  "mappings": [],
+  "diagrams": [],
+  "mockups": [],
+  "explanation_levels": [
+    {
+      "level": 1,
+      "title": "白話目的",
+      "reader": "所有讀者",
+      "note": "先讀問題、成功定義與本期範圍。",
+      "chapter_ids": [
+        "C01",
+        "C02",
+        "C03"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "使用者任務",
+      "reader": "PM、客戶及操作人員",
+      "note": "再讀角色、操作路徑與責任交接。",
+      "chapter_ids": [
+        "C04",
+        "C06"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "業務規則與狀態",
+      "reader": "產品、工程與QA",
+      "note": "確認功能邊界、資料、規則與狀態。",
+      "chapter_ids": [
+        "C05",
+        "C07",
+        "C08"
+      ]
+    },
+    {
+      "level": 4,
+      "title": "系統互動與技術契約",
+      "reader": "工程與介接窗口",
+      "note": "讀取系統時序。未提供的API與部署架構仍待確認。",
+      "chapter_ids": [
+        "C09"
+      ]
+    },
+    {
+      "level": 5,
+      "title": "極限邊界與驗證",
+      "reader": "PM、工程與QA",
+      "note": "檢查驗收、失敗、復原及決策。最後查看機器驗證結果。",
+      "chapter_ids": [
+        "C10",
+        "C11"
+      ]
+    }
+  ],
+  "goals": [],
+  "contracts": [],
+  "checks": [],
+  "changes": []
+}
